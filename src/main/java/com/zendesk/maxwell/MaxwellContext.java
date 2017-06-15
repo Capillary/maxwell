@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.zendesk.maxwell.metrics.MaxwellMetrics;
 import com.zendesk.maxwell.bootstrap.AbstractBootstrapper;
@@ -274,7 +276,9 @@ public class MaxwellContext {
 			this.producer = new MaxwellKafkaProducer(this, this.config.getKafkaProperties(), this.config.kafkaTopic);
 			break;
 		case "kinesis":
-			this.producer = new MaxwellKinesisProducer(this, this.config.kinesisStream);
+		    Map<String, String> configMap = new HashMap<>();
+		    configMap.put("STREAM_NAME", this.config.kinesisStream);
+			this.producer = new MaxwellKinesisProducer(this, configMap);
 			break;
 		case "profiler":
 			this.producer = new ProfilerProducer(this);
