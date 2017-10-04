@@ -74,31 +74,36 @@ class KinesisCallback implements FutureCallback<UserRecordResult> {
 	};
 }
 
+
 public class MaxwellKinesisProducer extends AbstractAsyncProducer {
 	private static final Logger logger = LoggerFactory.getLogger(MaxwellKinesisProducer.class);
 
 	private final MaxwellKinesisPartitioner partitioner;
 	private final KinesisProducer kinesisProducer;
 	private final String kinesisStream;
-
-	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream) {
-		super(context);
-
-		String partitionKey = context.getConfig().producerPartitionKey;
-		String partitionColumns = context.getConfig().producerPartitionColumns;
-		String partitionFallback = context.getConfig().producerPartitionFallback;
-		boolean kinesisMd5Keys = context.getConfig().kinesisMd5Keys;
-		this.partitioner = new MaxwellKinesisPartitioner(partitionKey, partitionColumns, partitionFallback, kinesisMd5Keys);
-		this.kinesisStream = kinesisStream;
-
-		Path path = Paths.get("kinesis-producer-library.properties");
-		if(Files.exists(path) && Files.isRegularFile(path)) {
-			KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(path.toString());
-			this.kinesisProducer = new KinesisProducer(config);
-		} else {
-			this.kinesisProducer = new KinesisProducer();
-		}
+	
+	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream){
+	    this(context, kinesisStream, "kinesis-producer-library.properties");
 	}
+		
+	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream, String kinesisConfigFile) {
+		super(context);
+		String partitionKey = context.getConfig().producerPartitionKey;
+        String partitionColumns = context.getConfig().producerPartitionColumns;
+        String partitionFallback = context.getConfig().producerPartitionFallback;
+        boolean kinesisMd5Keys = context.getConfig().kinesisMd5Keys;
+        this.partitioner = new MaxwellKinesisPartitioner(partitionKey, partitionColumns, partitionFallback, kinesisMd5Keys);
+        this.kinesisStream = kinesisStream;
+        
+        Path path = Paths.get(kinesisConfigFile);
+        if(Files.exists(path) && Files.isRegularFile(path)) {
+            KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(path.toString());
+            this.kinesisProducer = new KinesisProducer(config);
+        } else {
+            this.kinesisProducer = new KinesisProducer();
+        }
+	}
+	
 
 	@Override
 	public void sendAsync(RowMap r, AbstractAsyncProducer.CallbackCompleter cc) throws Exception {
