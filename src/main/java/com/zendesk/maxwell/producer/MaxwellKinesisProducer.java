@@ -80,8 +80,12 @@ public class MaxwellKinesisProducer extends AbstractAsyncProducer {
 	private final MaxwellKinesisPartitioner partitioner;
 	private final KinesisProducer kinesisProducer;
 	private final String kinesisStream;
+	
+	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream){
+	    this(context, kinesisStream, "kinesis-producer-library.properties");
+	}
 
-	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream) {
+	public MaxwellKinesisProducer(MaxwellContext context, String kinesisStream, String kinesisConfigFile) {
 		super(context);
 
 		String partitionKey = context.getConfig().producerPartitionKey;
@@ -91,7 +95,7 @@ public class MaxwellKinesisProducer extends AbstractAsyncProducer {
 		this.partitioner = new MaxwellKinesisPartitioner(partitionKey, partitionColumns, partitionFallback, kinesisMd5Keys);
 		this.kinesisStream = kinesisStream;
 
-		Path path = Paths.get("kinesis-producer-library.properties");
+		Path path = Paths.get(kinesisConfigFile);
 		if(Files.exists(path) && Files.isRegularFile(path)) {
 			KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(path.toString());
 			this.kinesisProducer = new KinesisProducer(config);
