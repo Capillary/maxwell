@@ -2,7 +2,8 @@ package com.zendesk.maxwell.schema.columndef;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -28,15 +29,10 @@ public class TimeColumnDef extends ColumnDefWithLength {
 		} else if ( value instanceof Long ) {
 		    
 		    //need to set timezone to GMT before converting long to date
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-            calendar.setTimeInMillis((Long) value / 1000 + (new Date(0)).getTime());
-
-            String timeAsStr = String.valueOf(Time.valueOf(calendar.get(Calendar.HOUR_OF_DAY)
-                                                           + ":"
-                                                           + calendar.get(Calendar.MINUTE)
-                                                           + ":"
-                                                           + calendar.get(Calendar.SECOND)));
+		    long millisSinceEpoch = (Long) value / 1000 + (new Date(0)).getTime();
+		    LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millisSinceEpoch), TimeZone.getTimeZone("GMT").toZoneId());
+		    
+		    String timeAsStr = String.valueOf(Time.valueOf(localDateTime.getHour() + ":" + localDateTime.getMinute() + ":" + localDateTime.getSecond()));
 
 			return appendFractionalSeconds(timeAsStr, (int) ((Long) value % 1000000) * 1000, this.columnLength);
 		} else {
