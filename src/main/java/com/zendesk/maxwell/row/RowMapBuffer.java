@@ -16,7 +16,7 @@ public class RowMapBuffer extends ListWithDiskBuffer<RowMap> {
 
 	public RowMapBuffer(long maxInMemoryElements) {
 		super(maxInMemoryElements);
-		this.maxMemory = (long) (Runtime.getRuntime().maxMemory() * 0.5);
+		this.maxMemory = (long) (Runtime.getRuntime().maxMemory() * 0.4);
 	}
 
 	public RowMapBuffer(long maxInMemoryElements, double memoryFraction) {
