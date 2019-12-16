@@ -10,7 +10,7 @@ public class RowMapBufferByTable {
 
 	private class Buffer extends RowMapBuffer {
 		public Buffer() throws IOException {
-			super(MAX_TX_ELEMENTS);
+			super(MAX_TX_ELEMENTS,0.2);
 		}
 	}
 

@@ -185,7 +185,7 @@ public class Maxwell implements Runnable {
 
 		AbstractProducer producer = this.context.getProducer();
 		AbstractBootstrapper bootstrapper = this.context.getBootstrapper();
-		LOGGER.info("bootstrap class: {} class type {}",bootstrapper,bootstrapper.getClass());
+		LOGGER.debug("bootstrap class: {} class type {}",bootstrapper,bootstrapper.getClass());
 		Position initPosition = getInitialPosition();
 		logBanner(producer, initPosition);
 		this.context.setPosition(initPosition);
