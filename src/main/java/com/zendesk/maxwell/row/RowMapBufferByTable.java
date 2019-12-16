@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 
 public class RowMapBufferByTable {
 
-	private final long MAX_TX_ELEMENTS = 10000;
+	private final long MAX_TX_ELEMENTS = 1000 * 1000;
 
 	private class Buffer extends RowMapBuffer {
 		public Buffer() throws IOException {
