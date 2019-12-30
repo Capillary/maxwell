@@ -251,8 +251,10 @@ public class BinlogConnectorReplicator extends AbstractReplicator implements Rep
 
 				if ( row != null && isMaxwellRow(row) && row.getTable().equals("heartbeats") )
 					return processHeartbeats(row);
-				else
+				else {
+					LOGGER.info("individual row xid {}",row.getXid());
 					return row;
+				}
 			}
 
 			event = pollEvent();
