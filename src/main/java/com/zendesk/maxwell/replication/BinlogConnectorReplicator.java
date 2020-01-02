@@ -173,6 +173,7 @@ public class BinlogConnectorReplicator extends AbstractReplicator implements Rep
 				if(eventType == EventType.XID) {
 					buffer.setXid(event.xidData().getXid());
 				}
+				LOGGER.info("got transaction commit added  to buffer xid " + event.xidData().getXid());
 				return buffer;
 			}
 
@@ -252,10 +253,12 @@ public class BinlogConnectorReplicator extends AbstractReplicator implements Rep
 				if ( row != null && isMaxwellRow(row) && row.getTable().equals("heartbeats") )
 					return processHeartbeats(row);
 				else {
-					LOGGER.info("individual row xid {}",row.getXid());
+					LOGGER.info("individual row xid {} , table {} row_info {} ",row.getXid(),row.getTable(), row);
 					return row;
 				}
 			}
+
+			LOGGER.info("got empty buffer");
 
 			event = pollEvent();
 
