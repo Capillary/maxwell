@@ -15,8 +15,11 @@ import com.zendesk.maxwell.errors.DuplicateProcessException;
 import com.zendesk.maxwell.replication.Position;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MysqlPositionStoreTest extends MaxwellTestWithIsolatedServer {
+	static final Logger LOGGER = LoggerFactory.getLogger(MysqlPositionStoreTest.class);
 	private MysqlPositionStore buildStore() throws Exception {
 		return buildStore(buildContext());
 	}
@@ -55,6 +58,7 @@ public class MysqlPositionStoreTest extends MaxwellTestWithIsolatedServer {
 		store.set(new Position(new BinlogPosition(12345, "foo"), 0L));
 
 		Long preHeartbeat = System.currentTimeMillis();
+		LOGGER.info("Sending heartbeat from MysqlPositionStoreTest testHeartbeat heartbeat: currentTime ");
 		store.heartbeat();
 
 		ResultSet rs = server.getConnection().createStatement().executeQuery("select * from maxwell.heartbeats");
@@ -67,7 +71,7 @@ public class MysqlPositionStoreTest extends MaxwellTestWithIsolatedServer {
 	public void testHeartbeatDuplicate() throws Exception {
 		MysqlPositionStore store = buildStore();
 		store.set(new Position(new BinlogPosition(12345, "foo"), 0L));
-
+		LOGGER.info("Sending heartbeat from MysqlPositionStoreTest testHearBeatDuplicate 1 heartbeat: currentTime ");
 		store.heartbeat();
 		buildStore().heartbeat();
 
@@ -75,6 +79,8 @@ public class MysqlPositionStoreTest extends MaxwellTestWithIsolatedServer {
 		Exception exception = null;
 
 		try {
+			LOGGER.info("Sending heartbeat from MysqlPositionStoreTest testHearBeatDuplicate 2 heartbeat: "
+				+ "currentTime");
 			store.heartbeat();
 		} catch (DuplicateProcessException d) {
 			exception = d;
