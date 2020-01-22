@@ -146,7 +146,7 @@ public class MysqlPositionStore {
 					+ "Maxwell process running with the same client_id?",
 				lastHeartbeat,serverID,clientID
 			);
-
+			LOGGER.info(msg);
 			throw new DuplicateProcessException(msg);
 		}
 
