@@ -174,6 +174,7 @@ public class RecoveryTest extends TestWithNameLogging {
 		}
 
 		long heartbeat = lastHeartbeat + 1L;
+		LOGGER.info("Sending heartbeat from RecoveryTest: " + heartbeat);
 		positionStore.heartbeat(heartbeat);
 
 		int initialRowCount = rows.size();

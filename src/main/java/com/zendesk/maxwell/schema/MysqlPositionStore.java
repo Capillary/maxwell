@@ -142,10 +142,11 @@ public class MysqlPositionStore {
 		int nRows = s.executeUpdate();
 		if ( nRows != 1 ) {
 			String msg = String.format(
-				"Expected a heartbeat value of %d but didn't find it.  Is another Maxwell process running with the same client_id?",
-				lastHeartbeat
+				"Expected a heartbeat value of %d with server_id %d and client_id %d but didn't find it.  Is another "
+					+ "Maxwell process running with the same client_id?",
+				lastHeartbeat,serverID,clientID
 			);
-
+			LOGGER.info(msg);
 			throw new DuplicateProcessException(msg);
 		}
 

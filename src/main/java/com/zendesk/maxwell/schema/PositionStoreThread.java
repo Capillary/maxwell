@@ -71,6 +71,7 @@ public class PositionStoreThread extends RunLoopProcess implements Runnable {
 	}
 
 	public void heartbeat() throws Exception {
+		LOGGER.info("Sending heartbeat from PositionStoreThread heartbeat call heartbeat: currentTime ");
 		store.heartbeat();
 	}
 
@@ -107,6 +108,7 @@ public class PositionStoreThread extends RunLoopProcess implements Runnable {
 		try { Thread.sleep(1000); } catch (InterruptedException e) { }
 
 		if ( shouldHeartbeat(newPosition) )  {
+			LOGGER.info("Sending heartbeat from PositionStoreThread work call heartbeat: currentTime ");
 			lastHeartbeatSent = store.heartbeat();
 			if (newPosition != null) {
 				lastHeartbeatSentFrom = newPosition.getBinlogPosition();

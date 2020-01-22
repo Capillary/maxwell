@@ -130,6 +130,7 @@ public class MaxwellContext {
 	}
 
 	public long heartbeat() throws Exception {
+		LOGGER.info("Sending heartbeat from MaxwellContext heartbeat: currentTime ");
 		return this.positionStore.heartbeat();
 	}
 
@@ -143,7 +144,7 @@ public class MaxwellContext {
 
 	private void sendFinalHeartbeat() {
 		long heartbeat = System.currentTimeMillis();
-		LOGGER.info("Sending final heartbeat: " + heartbeat);
+		LOGGER.info("Sending heartbeat from MaxwellContext final heartbeat: " + heartbeat);
 		try {
 			this.replicator.stopAtHeartbeat(heartbeat);
 			this.positionStore.heartbeat(heartbeat);

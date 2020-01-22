@@ -208,6 +208,7 @@ public class MaxwellTestSupport {
 		}
 
 		callback.afterReplicatorStart(mysql);
+		LOGGER.info("Sending heartbeat from MaxwellTestSupport heartbeat: currentTime ");
 		long finalHeartbeat = maxwell.context.getPositionStore().heartbeat();
 
 		LOGGER.debug("running replicator up to heartbeat: " + finalHeartbeat);
